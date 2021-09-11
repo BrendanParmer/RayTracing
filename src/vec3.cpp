@@ -30,6 +30,17 @@ vec3 vec3::operator/(const double &a)
     return vec3(x/a, y/a, z/a);
 }
 
+double vec3::dot(const vec3 &u, const vec3 &v)
+{
+    return u.x*v.x + u.y*v.y + u.z*v.z;
+}
+
+vec3 vec3::cross(const vec3 &u, const vec3 &v)
+{
+    return vec3(u.y*v.z - u.z*v.y,
+                u.z*v.x - u.x*v.z,
+                u.x*v.y - u.y*v.x);
+}
 
 vec3 vec3::operator+=(const vec3 &other)
 {
@@ -53,6 +64,16 @@ vec3 vec3::operator/=(const double &a)
 
 double vec3::length() const {
     return std::sqrt(x*x + y*y + z*z);
+}
+
+vec3 vec3::unit(vec3 v)
+{
+    return v / v.length();
+}
+
+std::string vec3::to_string(const vec3 &v)
+{
+    return "(" + v.x + ", " + v.y + ", " + v.z + ")";
 }
 
 double vec3::operator[](int i) const {
