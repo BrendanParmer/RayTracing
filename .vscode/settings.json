@@ -1,0 +1,10 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "c:\\Users\\bjpar\\Documents\\GitHub\\RayTracing",
+            "binaryPath": "c:\\Users\\bjpar\\Documents\\GitHub\\RayTracing\\output",
+            "binaryArgs": []
+        }
+    ]
+}
