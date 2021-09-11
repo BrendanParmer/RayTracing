@@ -73,7 +73,9 @@ vec3 vec3::unit(vec3 v)
 
 std::string vec3::to_string(const vec3 &v)
 {
-    return "(" + v.x + ", " + v.y + ", " + v.z + ")";
+    return "(" + std::to_string(v.x) + ", " 
+               + std::to_string(v.y) + ", " 
+               + std::to_string(v.z) + ")";
 }
 
 double vec3::operator[](int i) const {
