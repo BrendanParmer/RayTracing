@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 class vec3 {
     public:
         double x;
@@ -21,8 +23,6 @@ class vec3 {
         vec3 operator-=(const vec3& other);
         vec3 operator*=(const double &a);
         vec3 operator/=(const double &a);
-
-        vec3 operator=(const vec3& other);
 
         //functions
         double length() const;
