@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../extern/stb_image.h"
@@ -11,33 +12,20 @@
 
 #include "vec3.h"
 #include "ray.h"
+#include "sphere.h"
+#include "hittable_list.h"
 
 
-double hit_sphere(const ray& r, const point3& center, double radius)
+
+color ray_color(const ray& ray, const hittable& world)
 {
-    vec3 sdfo = r.orig - center; //sphere distance from origin
-    double a = dot(r.dir, r.dir);
-    double half_b = dot(r.dir, sdfo);
-    double c = dot(sdfo, sdfo) - radius*radius;
-    double discriminant = half_b*half_b - a*c;
-    if (discriminant < 0)
-        return -1.0;
-    else
-        return (-half_b - sqrt(discriminant)) / a;
-}
-
-color ray_color(const ray& r)
-{
-    point3 center = point3(0, 0, -1);
-    double radius = 0.4;
-    double t = hit_sphere(r, center, radius);
-    if (t > 0.0)
+    hit_record rec;
+    if (world.hit(ray, 0, INFINITY, rec))
     {
-        vec3 normal = unit(r.at(t) - center);
-        return 0.5*color(normal.x +1, normal.y+1, normal.z+1);
+        return 0.5 * (rec.normal + color(1, 1, 1));
     }
-    t = 0.5*(unit(r.dir).y + 1.0);
-    return (1.0-t)*color(0.93, 0.9, 1.0) + t*color(0.53, 0.5, 0.6);
+    double t = 0.5 * (unit(ray.dir).y + 1.0);
+    return (1.0 - t)*color(0.93, 0.9, 1.0) + t*color(0.53, 0.5, 0.6);
 }
 
 int main() {
@@ -49,6 +37,22 @@ int main() {
     std::cout << "Creating image of dimensions (" << width << ", " << height << ")" << std::endl;
     const int channels = 3;
 
+    //world
+    hittable_list world;
+
+    //center sphere
+    point3 center0 = point3(0, 0, -1);
+    double rad0 = 0.4;
+    sphere sphere0 = sphere(center0, rad0);
+
+    //ground sphere
+    point3 center1 = point3(0, -100.5, -1);
+    double rad1 = 100;
+    sphere sphere1 = sphere(center1, rad1);
+
+    world.add(std::make_shared<sphere>(sphere1));
+    world.add(std::make_shared<sphere>(sphere0));
+    
     //camera stuff
 
     double viewport_height = 2.0;
@@ -72,7 +76,7 @@ int main() {
             double v = double(j)/(height - 1);
             ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
 
-            color pixel_color = ray_color(r) * 255;
+            color pixel_color = 255 *ray_color(r, world);
 
             pixels[index++] = pixel_color.x;
             pixels[index++] = pixel_color.y;

@@ -2,4 +2,3 @@
 *.o
 *.png
 .vscode/
-build/
