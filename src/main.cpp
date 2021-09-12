@@ -12,6 +12,8 @@
 
 #include "utility.h"
 #include "camera.h"
+
+#include "hittable_list.h"
 #include "sphere.h"
 
 color ray_color(const ray& ray, const hittable& world)
@@ -22,7 +24,8 @@ color ray_color(const ray& ray, const hittable& world)
         return 0.5 * (rec.normal + color(1, 1, 1));
     }
     double t = 0.5 * (unit(ray.dir).y + 1.0);
-    return (1.0-t)*color(1.0, 1.0, 1.0) + t*color(0.5, 0.7, 1.0);
+    color world_color = (1.0-t)*color(1.0, 1.0, 1.0) + t*color(0.5, 0.7, 1.0);
+    return world_color; 
 }
 
 int main() {
@@ -69,10 +72,15 @@ int main() {
                 double u = double(i + random_double())/(width - 1);
                 double v = double(j + random_double())/(height - 1);
                 ray ray = cam.get_ray(u, v);
-                pixel_color += 255 * ray_color(ray, world);
+                pixel_color += ray_color(ray, world);
+                hit_record temp_rec;
             }
             pixel_color /= samples_per_pixel;
-            
+            //gotta clamp to 0.999 because if it's 1 then that component could be 256, 
+            //which the PNG converter would discard
+            pixel_color = pixel_color.clamp_vec3(0, 0.999);
+            pixel_color *= 256;
+
             pixels[index++] = pixel_color.x;
             pixels[index++] = pixel_color.y;
             pixels[index++] = pixel_color.z;

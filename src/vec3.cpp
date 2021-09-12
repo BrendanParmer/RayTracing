@@ -20,24 +20,36 @@ vec3 vec3::operator-() const {
 }
 
 
-vec3 vec3::operator+=(const vec3 &other)
+vec3& vec3::operator+=(const vec3 &other)
 {
-    return *this + other;
+    x += other.x;
+    y += other.y;
+    z += other.z;
+    return *this;
 }
 
-vec3 vec3::operator-=(const vec3 &other)
+vec3& vec3::operator-=(const vec3 &other)
 {
-    return *this - other;
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+    return *this;
 }
 
-vec3 vec3::operator*=(const double &a)
+vec3& vec3::operator*=(const double &a)
 {
-    return a * (*this);
+    x *= a;
+    y *= a;
+    z *= a;
+    return *this;
 }
 
-vec3 vec3::operator/=(const double &a)
+vec3& vec3::operator/=(const double &a)
 {
-    return (*this) / a;
+    x /= a;
+    y /= a;
+    z /= a;
+    return *this;
 }
 
 
@@ -45,13 +57,19 @@ double vec3::length() const {
     return std::sqrt(x*x + y*y + z*z);
 }
 
-std::string vec3::to_string(const vec3 &v)
+std::string vec3::to_string()
 {
-    return "(" + std::to_string(v.x) + ", " 
-               + std::to_string(v.y) + ", " 
-               + std::to_string(v.z) + ")";
+    return "(" + std::to_string(x) + ", " 
+               + std::to_string(y) + ", " 
+               + std::to_string(z) + ")";
 }
 
+vec3 vec3::clamp_vec3(double min, double max)
+{
+    return vec3(clamp(x, min, max),
+                clamp(y, min, max),
+                clamp(z, min, max));
+}
 
 double vec3::operator[](int i) const {
     i %= 3;

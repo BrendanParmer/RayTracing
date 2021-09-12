@@ -3,6 +3,8 @@
 #include <cmath>
 #include <string>
 
+#include "utility.h"
+
 class vec3 {
     public:
         double x;
@@ -15,14 +17,15 @@ class vec3 {
         //negative
         vec3 operator-() const;
 
-        vec3 operator+=(const vec3& other);
-        vec3 operator-=(const vec3& other);
-        vec3 operator*=(const double &a);
-        vec3 operator/=(const double &a);
+        vec3& operator+=(const vec3& other);
+        vec3& operator-=(const vec3& other);
+        vec3& operator*=(const double &a);
+        vec3& operator/=(const double &a);
         
         //functions
         double length() const;
-        std::string to_string(const vec3 &v);
+        std::string to_string();
+        vec3 clamp_vec3(double min, double max);
 
         //indexing
         double operator[](int i) const;

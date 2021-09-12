@@ -1,9 +1,5 @@
 #pragma once
 
-#include "vec3.h"
-#include "ray.h"
-#include "hittable_list.h"
-
 #include <cstdlib>
 #include <numbers>
 
