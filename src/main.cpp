@@ -13,21 +13,30 @@
 #include "ray.h"
 
 
-bool hit_sphere(const ray& r, const point3& center, double radius)
+double hit_sphere(const ray& r, const point3& center, double radius)
 {
     vec3 sdfo = r.orig - center; //sphere distance from origin
     double a = dot(r.dir, r.dir);
     double b = 2.0*dot(r.dir, sdfo);
     double c = dot(sdfo, sdfo) - radius*radius;
     double discriminant = b*b - 4*a*c;
-    return (discriminant > 0);
+    if (discriminant < 0)
+        return -1.0;
+    else
+        return (-b - sqrt(discriminant)) / (2.0*a);
 }
 
 color ray_color(const ray& r)
 {
-    if (hit_sphere(r, point3(0, 0, -1), 0.4))
-        return color(1, 0, 0);
-    double t = 0.5*(unit(r.dir).y + 1.0);
+    point3 center = point3(0, 0, -1);
+    double radius = 0.4;
+    double t = hit_sphere(r, center, radius);
+    if (t > 0.0)
+    {
+        vec3 normal = unit(r.at(t) - center);
+        return 0.5*color(normal.x +1, normal.y+1, normal.z+1);
+    }
+    t = 0.5*(unit(r.dir).y + 1.0);
     return (1.0-t)*color(0.93, 0.9, 1.0) + t*color(0.53, 0.5, 0.6);
 }
 
