@@ -1,6 +1,7 @@
 #pragma once
 
-#include "utility.h"
+#include "vec3.h"
+#include "ray.h"
 
 class camera 
 {
