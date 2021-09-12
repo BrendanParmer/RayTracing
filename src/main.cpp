@@ -10,23 +10,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../extern/stb_image_write.h"
 
-#include "vec3.h"
-#include "ray.h"
 #include "sphere.h"
-#include "hittable_list.h"
-
-
-
-color ray_color(const ray& ray, const hittable& world)
-{
-    hit_record rec;
-    if (world.hit(ray, 0, INFINITY, rec))
-    {
-        return 0.5 * (rec.normal + color(1, 1, 1));
-    }
-    double t = 0.5 * (unit(ray.dir).y + 1.0);
-    return (1.0 - t)*color(0.93, 0.9, 1.0) + t*color(0.53, 0.5, 0.6);
-}
+#include "utility.h"
 
 int main() {
 
@@ -42,7 +27,7 @@ int main() {
 
     //center sphere
     point3 center0 = point3(0, 0, -1);
-    double rad0 = 0.4;
+    double rad0 = 0.5;
     sphere sphere0 = sphere(center0, rad0);
 
     //ground sphere
@@ -50,9 +35,9 @@ int main() {
     double rad1 = 100;
     sphere sphere1 = sphere(center1, rad1);
 
-    world.add(std::make_shared<sphere>(sphere1));
     world.add(std::make_shared<sphere>(sphere0));
-    
+    world.add(std::make_shared<sphere>(sphere1));
+
     //camera stuff
 
     double viewport_height = 2.0;
