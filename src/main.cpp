@@ -12,18 +12,32 @@
 #include "vec3.h"
 #include "ray.h"
 
+
+bool hit_sphere(const ray& r, const point3& center, double radius)
+{
+    vec3 sdfo = r.orig - center; //sphere distance from origin
+    double a = dot(r.dir, r.dir);
+    double b = 2.0*dot(r.dir, sdfo);
+    double c = dot(sdfo, sdfo) - radius*radius;
+    double discriminant = b*b - 4*a*c;
+    return (discriminant > 0);
+}
+
 color ray_color(const ray& r)
 {
+    if (hit_sphere(r, point3(0, 0, -1), 0.4))
+        return color(1, 0, 0);
     double t = 0.5*(unit(r.dir).y + 1.0);
-    return (1.0-t)*color(0.7, 0.7, 0.8) + t*color(0.2, 0.2, 0.25);
+    return (1.0-t)*color(0.93, 0.9, 1.0) + t*color(0.53, 0.5, 0.6);
 }
+
 int main() {
 
     // Image
     const double aspect_ratio = 16.0/9.0;
     const int width = 1600;
     const int height = static_cast<int>(width/aspect_ratio);
-    std::cout << "Creating image of dimensisios (" << width << ", " << height << ")" << std::endl;
+    std::cout << "Creating image of dimensions (" << width << ", " << height << ")" << std::endl;
     const int channels = 3;
 
     //camera stuff
