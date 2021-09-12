@@ -6,5 +6,9 @@
             "binaryPath": "c:\\Users\\bjpar\\Documents\\GitHub\\RayTracing\\output",
             "binaryArgs": []
         }
-    ]
+    ],
+    "files.associations": {
+        "iostream": "cpp",
+        "ostream": "cpp"
+    }
 }

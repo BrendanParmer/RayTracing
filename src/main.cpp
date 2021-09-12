@@ -3,20 +3,39 @@
 #include <sstream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "extern/stb_image.h"
+#include "../extern/stb_image.h"
 
 #define STBI_MSC_SECURE_CRT
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "extern/stb_image_write.h"
+#include "../extern/stb_image_write.h"
 
+#include "vec3.h"
+#include "ray.h"
+
+color ray_color(const ray& r)
+{
+    double t = 0.5*(unit(r.dir).y + 1.0);
+    return (1.0-t)*color(0.7, 0.7, 0.8) + t*color(0.2, 0.2, 0.25);
+}
 int main() {
 
     // Image
-
-    const int width = 256;
-    const int height = 256;
-
+    const double aspect_ratio = 16.0/9.0;
+    const int width = 1600;
+    const int height = static_cast<int>(width/aspect_ratio);
+    std::cout << "Creating image of dimensisios (" << width << ", " << height << ")" << std::endl;
     const int channels = 3;
+
+    //camera stuff
+
+    double viewport_height = 2.0;
+    double viewport_width = aspect_ratio * viewport_height;
+    double focal_length = 1.0;
+
+    point3 origin = point3(0, 0, 0);
+    vec3 horizontal = vec3(viewport_width, 0, 0);
+    vec3 vertical = vec3(0, viewport_height, 0);
+    vec3 lower_left_corner = origin - horizontal/2 -vertical/2 - vec3(0, 0, focal_length);
 
     uint8_t* pixels = new uint8_t[width*height*channels];
 
@@ -26,16 +45,15 @@ int main() {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < width; ++i)
         {
-            float r = (float)i / (float)width;
-            float g = (float)j / (float)height;
-            float b = 0.2f;
-            int ir = int(255.99 * r);
-            int ig = int(255.99 * g);
-            int ib = int(255.99 * b);
+            double u = double(i)/(width - 1);
+            double v = double(j)/(height - 1);
+            ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
 
-            pixels[index++] = ir;
-            pixels[index++] = ig;
-            pixels[index++] = ib;
+            color pixel_color = ray_color(r) * 255;
+
+            pixels[index++] = pixel_color.x;
+            pixels[index++] = pixel_color.y;
+            pixels[index++] = pixel_color.z;
         }
     }
     stbi_write_png("image.png", width, height, channels, pixels, width*channels);

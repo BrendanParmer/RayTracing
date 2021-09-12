@@ -22,7 +22,6 @@ class vec3 {
         
         //functions
         double length() const;
-        vec3 unit(vec3 v);
         std::string to_string(const vec3 &v);
 
         //indexing
@@ -68,5 +67,9 @@ inline vec3 cross(const vec3 &u, const vec3 &v)
                 u.x*v.y - u.y*v.x);
 }
 
+inline vec3 unit(vec3 v)
+{
+    return v / v.length();
+}
 using point3 = vec3;
 using color = vec3;

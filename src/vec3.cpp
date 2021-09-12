@@ -45,11 +45,6 @@ double vec3::length() const {
     return std::sqrt(x*x + y*y + z*z);
 }
 
-vec3 vec3::unit(vec3 v)
-{
-    return v / v.length();
-}
-
 std::string vec3::to_string(const vec3 &v)
 {
     return "(" + std::to_string(v.x) + ", " 
