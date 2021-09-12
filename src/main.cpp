@@ -17,13 +17,13 @@ double hit_sphere(const ray& r, const point3& center, double radius)
 {
     vec3 sdfo = r.orig - center; //sphere distance from origin
     double a = dot(r.dir, r.dir);
-    double b = 2.0*dot(r.dir, sdfo);
+    double half_b = dot(r.dir, sdfo);
     double c = dot(sdfo, sdfo) - radius*radius;
-    double discriminant = b*b - 4*a*c;
+    double discriminant = half_b*half_b - a*c;
     if (discriminant < 0)
         return -1.0;
     else
-        return (-b - sqrt(discriminant)) / (2.0*a);
+        return (-half_b - sqrt(discriminant)) / a;
 }
 
 color ray_color(const ray& r)
