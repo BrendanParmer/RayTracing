@@ -30,6 +30,19 @@ class vec3 {
         //indexing
         double operator[](int i) const;
         double operator[](unsigned i) const;
+
+        inline static vec3 random()
+        {
+            return vec3(random_double(), random_double(), random_double());
+        }
+        inline static vec3 random(double min, double max)
+        {
+            return vec3(random_double(min, max),
+                        random_double(min, max),
+                        random_double(min, max));
+        }
+
+        vec3 random_in_unit_sphere();
 };
 
 inline vec3 operator+(const vec3 &u, const vec3 &v)
@@ -74,5 +87,6 @@ inline vec3 unit(vec3 v)
 {
     return v / v.length();
 }
+
 using point3 = vec3;
 using color = vec3;

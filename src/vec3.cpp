@@ -83,6 +83,19 @@ double vec3::operator[](int i) const {
         return z;
 }
 
-double vec3::operator[](unsigned i) const {
+double vec3::operator[](unsigned i) const 
+{
     return (*this)[(int) i];
+}
+
+vec3 vec3::random_in_unit_sphere()
+{
+    while (true)
+    {
+        vec3 p = vec3::random(-1, 1);
+        if (dot(p, p) < 1)
+        {
+            return p;
+        }
+    }
 }
